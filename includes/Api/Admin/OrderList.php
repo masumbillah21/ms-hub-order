@@ -19,7 +19,7 @@ class OrderList extends WP_REST_Controller  {
         $this->current_user = wp_get_current_user();
         $this->create_perssions = [
             'administrator',
-            'shop_manager',
+            'customer_support',
         ];
     }
 
