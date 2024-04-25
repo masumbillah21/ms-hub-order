@@ -12,7 +12,7 @@
     const isOpen = ref(false);
     const isUpdateModalOpen = ref(false);
     const updateOrderButtonText = ref('Update Order');
-    const syncButtonText = ref('Sync');
+
   
     let url = mhoAdminLocalizer.apiUrl + '/mho/v1/order-list'
 
@@ -45,7 +45,7 @@
                 responseText.value = error
             }).finally(() => {
                 updateOrderButtonText.value = 'Update Order';
-                isModalOpen.value = false
+                isUpdateModalOpen.value = false
             })
     }
 
