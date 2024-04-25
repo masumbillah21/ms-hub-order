@@ -46,6 +46,7 @@
             }).finally(() => {
                 updateOrderButtonText.value = 'Update Order';
                 isUpdateModalOpen.value = false
+                orderStore.fetchOrders();
             })
     }
 
@@ -89,21 +90,8 @@
         params.column_filters = data.column_filters;
         params.search = data.search;
 
-        if (data.change_type === 'search') {
-            filterOrder();
-        } else {
-            orderStore.fetchOrders();
-        }
+        orderStore.fetchOrders();
     };
-
-    const filterOrder = () => {
-        clearTimeout(timer1);
-        timer1 = setTimeout(() => {
-            getUsers1();
-        }, 300);
-    };
-
-
 
     onMounted(() => {
         orderStore.fetchOrders();

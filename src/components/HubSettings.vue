@@ -1,7 +1,9 @@
 <script setup>
-    import { ref } from 'vue'
-
+    import { ref, onMounted, watchEffect } from 'vue'
+    import { useHubStore } from '../stores/hub'
     import Axios from 'axios'
+
+    const hubStore = useHubStore();
 
     const homeUrl = ref('');
     const saveButtonText = ref('Save Settings');
@@ -37,23 +39,22 @@
         
     }
 
-    const getSettings = (e) => {
-        Axios.get(url)
-            .then((response) => {
-                form.value[0].value = response.data.token_key
-                form.value[1].value = response.data.whitelisted_domains
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    }
-
     const getHostUrl = () => {
         const { protocol, hostname, port } = window.location;
         homeUrl.value = `${protocol}//${hostname}${port ? `:${port}` : ''}`;
     };
-    getHostUrl()
-    getSettings()
+
+    onMounted(() => {
+        getHostUrl()
+        hubStore.fetchHubSettings()
+    })
+
+    watchEffect(() => {
+        if (hubStore.hubSettings) {
+            form.value[0].value = hubStore.hubSettings.token_key
+            form.value[1].value = hubStore.hubSettings.whitelisted_domains
+        }
+    })
 </script>
 
 <template>

@@ -1,6 +1,9 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, watchEffect } from 'vue'
 import Axios from 'axios';
+import { useStoreStore  } from '../stores/store';
+
+const storeStore = useStoreStore();
 
 let url = mhoAdminLocalizer.apiUrl + '/mho/v1/store-settings'
 const saveButtonText = ref('Save Settings');
@@ -34,18 +37,16 @@ const  saveSettings = async (e)  =>  {
     })
 }
 
-const getSettings = (e) => {
-  Axios.get( url )
-    .then( ( response ) => {
-        form.value[0].value = response.data.webhook_url
-        form.value[1].value = response.data.store_token_key
-        console.log(response.data)
-    } )
-    .catch( ( error ) => {
-        console.log( error )
-    } )
-}
-getSettings()
+onMounted(() => {
+  storeStore.fetchStoreSettings();
+})
+
+watchEffect(() => {
+  if (storeStore.storeSettings) {
+    form.value[0].value = storeStore.storeSettings.webhook_url
+    form.value[1].value = storeStore.storeSettings.store_token_key
+  }
+})
 </script>
 
 <template>
